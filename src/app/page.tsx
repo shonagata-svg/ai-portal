@@ -85,6 +85,7 @@ export default async function Home() {
     <div className="space-y-12">
       {/* Hero */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-10 text-white">
+        <div className="flex flex-col md:flex-row gap-8 items-center">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-50" />
         <div className="relative">
           <p className="text-sm font-medium text-blue-300 uppercase tracking-wider mb-2">
@@ -119,12 +120,11 @@ export default async function Home() {
               📝 プロンプトを探す
             </Link>
           </div>
+          </div>
+          <div className="md:w-1/2 flex-shrink-0 rounded-2xl overflow-hidden">
+            <img src="/横長16_9.jpg" alt="AI / HAPPINESS" className="w-full object-cover" />
+          </div>
         </div>
-      </section>
-
-      {/* AI / HAPPINESS Image */}
-      <section className="w-full rounded-2xl overflow-hidden">
-        <img src="/横長16_9.jpg" alt="AI / HAPPINESS" className="w-full object-cover" />
       </section>
 
       {/* Metrics */}
