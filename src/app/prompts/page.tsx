@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { getPrompts } from "@/lib/notion";
 import { extractTags, extractValues, matchesQuery } from "@/lib/search";
-import { Card, Tag, Badge, PageHeader, EmptyState } from "@/components/card";
+import { Card, Tag, Badge, PageHeader, EmptyState, AuthorChip } from "@/components/card";
 import { SearchBox, TagFilter } from "@/components/search-filter";
 import { CopyButton } from "@/components/copy-button";
 
@@ -86,6 +86,11 @@ export default async function PromptsPage(props: {
                   {p.tags.map((t) => (
                     <Tag key={t} label={t} />
                   ))}
+                </div>
+              )}
+              {p.author && (
+                <div className="mt-3 pt-3 border-t border-slate-100">
+                  <AuthorChip name={p.author} />
                 </div>
               )}
             </Card>

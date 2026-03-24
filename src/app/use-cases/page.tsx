@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { getUseCases } from "@/lib/notion";
 import { extractTags, extractValues, matchesQuery } from "@/lib/search";
-import { Card, Tag, Badge, PageHeader, EmptyState } from "@/components/card";
+import { Card, Tag, Badge, PageHeader, EmptyState, AuthorChip } from "@/components/card";
 import { SearchBox, TagFilter } from "@/components/search-filter";
 
 export const revalidate = 60;
@@ -91,6 +91,11 @@ export default async function UseCasesPage(props: {
                   {uc.tags.map((t) => (
                     <Tag key={t} label={t} />
                   ))}
+                </div>
+              )}
+              {uc.author && (
+                <div className="mt-3 pt-3 border-t border-slate-100">
+                  <AuthorChip name={uc.author} />
                 </div>
               )}
             </Card>

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   // Skip Basic Auth for the revalidation webhook endpoint
   if (req.nextUrl.pathname === "/api/revalidate") {
     return NextResponse.next();

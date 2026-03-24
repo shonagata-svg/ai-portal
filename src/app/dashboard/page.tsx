@@ -6,8 +6,12 @@ import {
   TOTAL_HEADCOUNT,
   TOTAL_REVENUE_TARGET,
   ANNUAL_WORK_MINUTES,
-  getDepartment,
 } from "@/lib/departments";
+import {
+  DepartmentBarChart,
+  CategoryPieChart,
+  ToolBarChart,
+} from "@/components/charts";
 
 export const revalidate = 60;
 
@@ -122,7 +126,7 @@ export default async function DashboardPage() {
         <h2 className="mb-4 text-sm font-bold text-slate-400 uppercase tracking-wider">
           全社サマリー
         </h2>
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <SummaryCard
             label="削減時間/タスク"
             value={`${totalMinutesPerTask}`}
@@ -162,8 +166,8 @@ export default async function DashboardPage() {
         <h2 className="mb-4 text-sm font-bold text-slate-400 uppercase tracking-wider">
           売上生産性インパクト（推計）
         </h2>
-        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-8 text-white">
-          <div className="grid gap-8 sm:grid-cols-3">
+        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6 sm:p-8 text-white">
+          <div className="grid gap-6 sm:grid-cols-3">
             <div>
               <p className="text-sm text-blue-300 font-medium mb-1">
                 全社売上目標
@@ -351,8 +355,45 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      {/* ===== Two-column: Category + Tool ===== */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      {/* ===== Charts: Dept Bar + Category Pie ===== */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <section>
+          <h2 className="mb-5 text-sm font-bold text-slate-400 uppercase tracking-wider">
+            部門別 年間削減時間（グラフ）
+          </h2>
+          <div className="rounded-2xl border border-slate-200 bg-white p-6">
+            <DepartmentBarChart
+              data={teamRows.map((t) => ({
+                name: t.name,
+                hours: Math.round(t.annualHours),
+                fte: t.fteEquiv,
+              }))}
+            />
+          </div>
+        </section>
+
+        <section>
+          <h2 className="mb-5 text-sm font-bold text-slate-400 uppercase tracking-wider">
+            カテゴリ別 削減時間（グラフ）
+          </h2>
+          <div className="rounded-2xl border border-slate-200 bg-white p-6">
+            <CategoryPieChart data={categories} />
+          </div>
+        </section>
+      </div>
+
+      {/* ===== Tool Chart ===== */}
+      <section>
+        <h2 className="mb-5 text-sm font-bold text-slate-400 uppercase tracking-wider">
+          使用ツール 分布（グラフ）
+        </h2>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6">
+          <ToolBarChart data={tools} />
+        </div>
+      </section>
+
+      {/* ===== Two-column: Category + Tool (table) ===== */}
+      <div className="grid gap-4 lg:grid-cols-2">
         <section>
           <h2 className="mb-5 text-sm font-bold text-slate-400 uppercase tracking-wider">
             カテゴリ別 削減時間

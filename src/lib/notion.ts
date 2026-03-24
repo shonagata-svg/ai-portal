@@ -6,6 +6,7 @@ import type {
   PlaybookEntry,
   FAQEntry,
   Event,
+  AITool,
 } from "./types";
 
 export const notion = new Client({ auth: process.env.NOTION_API_KEY });
@@ -113,6 +114,7 @@ export async function getUseCases(): Promise<UseCase[]> {
       prompt: text(props.prompt),
       description: text(props.description),
       tags: tags(props.tags),
+      author: text(props.submitted_by),
       updatedAt: lastEdited(props.updated_at),
     };
   });
@@ -132,6 +134,7 @@ export async function getPrompts(): Promise<Prompt[]> {
       promptText: text(props.prompt_text),
       tags: tags(props.tags),
       example: text(props.example),
+      author: text(props.submitted_by),
       updatedAt: lastEdited(props.updated_at),
     };
   });
@@ -150,6 +153,7 @@ export async function getPlaybook(): Promise<PlaybookEntry[]> {
       section: sel(props.section),
       body: text(props.body),
       tags: tags(props.tags),
+      author: text(props.submitted_by),
       updatedAt: lastEdited(props.updated_at),
     };
   });
@@ -167,6 +171,7 @@ export async function getFAQ(): Promise<FAQEntry[]> {
       question: title(props.question),
       answer: text(props.answer),
       tags: tags(props.tags),
+      author: text(props.submitted_by),
       updatedAt: lastEdited(props.updated_at),
     };
   });
@@ -191,6 +196,7 @@ export async function createUseCase(data: {
   description: string;
   prompt: string;
   tags: string[];
+  author: string;
 }) {
   const dbId = process.env.NOTION_DB_ID_USECASES;
   if (!dbId) throw new Error("NOTION_DB_ID_USECASES not set");
@@ -205,6 +211,7 @@ export async function createUseCase(data: {
       description: { rich_text: [{ text: { content: data.description } }] },
       prompt: { rich_text: [{ text: { content: data.prompt } }] },
       tags: { multi_select: data.tags.map((t) => ({ name: t })) },
+      submitted_by: { rich_text: [{ text: { content: data.author } }] },
     },
   });
 }
@@ -215,6 +222,7 @@ export async function createPrompt(data: {
   promptText: string;
   example: string;
   tags: string[];
+  author: string;
 }) {
   const dbId = process.env.NOTION_DB_ID_PROMPTS;
   if (!dbId) throw new Error("NOTION_DB_ID_PROMPTS not set");
@@ -226,6 +234,7 @@ export async function createPrompt(data: {
       prompt_text: { rich_text: [{ text: { content: data.promptText } }] },
       example: { rich_text: [{ text: { content: data.example } }] },
       tags: { multi_select: data.tags.map((t) => ({ name: t })) },
+      submitted_by: { rich_text: [{ text: { content: data.author } }] },
     },
   });
 }
@@ -235,6 +244,7 @@ export async function createPlaybookEntry(data: {
   section: string;
   body: string;
   tags: string[];
+  author: string;
 }) {
   const dbId = process.env.NOTION_DB_ID_PLAYBOOK;
   if (!dbId) throw new Error("NOTION_DB_ID_PLAYBOOK not set");
@@ -245,6 +255,7 @@ export async function createPlaybookEntry(data: {
       section: { select: data.section ? { name: data.section } : null },
       body: { rich_text: [{ text: { content: data.body } }] },
       tags: { multi_select: data.tags.map((t) => ({ name: t })) },
+      submitted_by: { rich_text: [{ text: { content: data.author } }] },
     },
   });
 }
@@ -253,6 +264,7 @@ export async function createFAQEntry(data: {
   question: string;
   answer: string;
   tags: string[];
+  author: string;
 }) {
   const dbId = process.env.NOTION_DB_ID_FAQ;
   if (!dbId) throw new Error("NOTION_DB_ID_FAQ not set");
@@ -262,6 +274,7 @@ export async function createFAQEntry(data: {
       question: { title: [{ text: { content: data.question } }] },
       answer: { rich_text: [{ text: { content: data.answer } }] },
       tags: { multi_select: data.tags.map((t) => ({ name: t })) },
+      submitted_by: { rich_text: [{ text: { content: data.author } }] },
     },
   });
 }
@@ -271,6 +284,7 @@ export async function createEvent(data: {
   date: string;
   body: string;
   tags: string[];
+  author: string;
 }) {
   const dbId = process.env.NOTION_DB_ID_EVENTS;
   if (!dbId) throw new Error("NOTION_DB_ID_EVENTS not set");
@@ -280,6 +294,68 @@ export async function createEvent(data: {
       title: { title: [{ text: { content: data.title } }] },
       date: { date: data.date ? { start: data.date } : null },
       body: { rich_text: [{ text: { content: data.body } }] },
+      tags: { multi_select: data.tags.map((t) => ({ name: t })) },
+      submitted_by: { rich_text: [{ text: { content: data.author } }] },
+    },
+  });
+}
+
+export async function getAITools(): Promise<AITool[]> {
+  const dbId = process.env.NOTION_DB_ID_TOOLS;
+  if (!dbId) return [];
+  let pages;
+  try { pages = await queryAll(dbId); } catch (e) { console.error("getAITools error:", e); return []; }
+  return pages.map((p) => {
+    const props = (p as { properties: Record<string, unknown> }).properties;
+    return {
+      id: p.id,
+      title: title(props.title),
+      category: sel(props.category),
+      description: text(props.description),
+      pricing: sel(props.pricing),
+      recommendedUse: text(props.recommended_use),
+      url: (props.url as { url?: string | null })?.url ?? "",
+      rating: num(props.rating),
+      status: sel(props.status),
+      tags: tags(props.tags),
+      updatedAt: lastEdited(props.updated_at),
+    };
+  });
+}
+
+export async function getAIToolById(id: string): Promise<AITool | null> {
+  const items = await getAITools();
+  const item = items.find((i) => i.id === id) ?? null;
+  if (!item) return null;
+  const content = await fetchPageContent(id);
+  if (content) item.description = content;
+  return item;
+}
+
+export async function createAITool(data: {
+  title: string;
+  category: string;
+  description: string;
+  pricing: string;
+  recommendedUse: string;
+  url: string;
+  rating: number;
+  status: string;
+  tags: string[];
+}) {
+  const dbId = process.env.NOTION_DB_ID_TOOLS;
+  if (!dbId) throw new Error("NOTION_DB_ID_TOOLS not set");
+  return notion.pages.create({
+    parent: { database_id: dbId },
+    properties: {
+      title: { title: [{ text: { content: data.title } }] },
+      category: { select: data.category ? { name: data.category } : null },
+      description: { rich_text: [{ text: { content: data.description } }] },
+      pricing: { select: data.pricing ? { name: data.pricing } : null },
+      recommended_use: { rich_text: [{ text: { content: data.recommendedUse } }] },
+      url: { url: data.url || null },
+      rating: { number: data.rating || null },
+      status: { select: data.status ? { name: data.status } : null },
       tags: { multi_select: data.tags.map((t) => ({ name: t })) },
     },
   });
@@ -327,6 +403,8 @@ export async function getEvents(): Promise<Event[]> {
       date: date(props.date),
       body: text(props.body),
       tags: tags(props.tags),
+      author: text(props.submitted_by),
+      updatedAt: lastEdited(props.updated_at),
     };
   });
 }

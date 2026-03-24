@@ -17,12 +17,14 @@ export async function POST(req: NextRequest) {
 
   const paths = [
     "/",
+    "/feed",
     "/use-cases",
     "/playbook",
     "/prompts",
     "/faq",
     "/events",
     "/dashboard",
+    "/tools",
   ];
 
   for (const path of paths) {

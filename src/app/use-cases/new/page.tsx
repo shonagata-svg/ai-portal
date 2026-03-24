@@ -50,6 +50,7 @@ export default function NewUseCasePage() {
         placeholder="使用しているプロンプトを貼り付け..."
       />
       <TagInput label="タグ" name="tags" />
+      <TextInput label="投稿者名" name="author" placeholder="例: 山田 太郎" hint="任意。カードに表示されます。" />
     </FormWrapper>
   );
 }

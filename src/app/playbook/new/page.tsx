@@ -28,6 +28,7 @@ export default function NewPlaybookPage() {
         placeholder="ガイドの内容を記述..."
       />
       <TagInput label="タグ" name="tags" />
+      <TextInput label="投稿者名" name="author" placeholder="例: 山田 太郎" hint="任意。カードに表示されます。" />
     </FormWrapper>
   );
 }

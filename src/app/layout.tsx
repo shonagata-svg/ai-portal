@@ -22,9 +22,9 @@ export default function RootLayout({
     <html lang="ja">
       <body className={`${geistSans.variable} antialiased`}>
         <Header />
-        <main className="mx-auto max-w-7xl px-6 py-8">{children}</main>
+        <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">{children}</main>
         <footer className="mt-16 border-t border-slate-200 bg-white">
-          <div className="mx-auto max-w-7xl px-6 py-6 text-center text-xs text-slate-400">
+          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 text-center text-xs text-slate-400">
             HERALBONY AI Portal — 社内AI推進チーム
           </div>
         </footer>

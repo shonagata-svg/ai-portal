@@ -8,6 +8,7 @@ export type UseCase = {
   prompt: string;
   description: string;
   tags: string[];
+  author: string;
   updatedAt: string;
 };
 
@@ -18,6 +19,7 @@ export type Prompt = {
   promptText: string;
   tags: string[];
   example: string;
+  author: string;
   updatedAt: string;
 };
 
@@ -27,6 +29,7 @@ export type PlaybookEntry = {
   section: string;
   body: string;
   tags: string[];
+  author: string;
   updatedAt: string;
 };
 
@@ -35,6 +38,7 @@ export type FAQEntry = {
   question: string;
   answer: string;
   tags: string[];
+  author: string;
   updatedAt: string;
 };
 
@@ -44,4 +48,20 @@ export type Event = {
   date: string;
   body: string;
   tags: string[];
+  author: string;
+  updatedAt: string;
+};
+
+export type AITool = {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  pricing: string;
+  recommendedUse: string;
+  url: string;
+  rating: number;
+  status: string;
+  tags: string[];
+  updatedAt: string;
 };

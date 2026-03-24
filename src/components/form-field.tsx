@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 const labelClass = "block text-sm font-semibold text-slate-700 mb-1.5";
 const inputClass =
-  "w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:outline-none transition-all";
+  "w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:outline-none transition-all";
 
 export function FormWrapper({
   title,
@@ -21,34 +21,40 @@ export function FormWrapper({
     <div className="max-w-2xl mx-auto">
       <a
         href={backHref}
-        className="mb-3 inline-flex items-center gap-1 text-sm text-slate-500 hover:text-blue-600 transition-colors"
+        className="mb-4 inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-blue-600 transition-colors"
       >
-        <span>←</span>
-        <span>一覧に戻る</span>
+        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        一覧に戻る
       </a>
+
       <div className="flex items-center gap-3 mb-8">
-        <span className="text-3xl">{icon}</span>
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-          {title}
-        </h1>
+        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-2xl">
+          {icon}
+        </span>
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">{title}</h1>
       </div>
-      <form action={action} className="space-y-6">
-        {children}
-        <div className="flex gap-3 pt-4">
-          <button
-            type="submit"
-            className="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all"
-          >
-            保存する
-          </button>
-          <a
-            href={backHref}
-            className="rounded-xl border border-slate-200 bg-white px-6 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all"
-          >
-            キャンセル
-          </a>
-        </div>
-      </form>
+
+      <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
+        <form action={action} className="space-y-5">
+          {children}
+          <div className="flex gap-3 pt-2 border-t border-slate-100">
+            <button
+              type="submit"
+              className="rounded-xl bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all shadow-sm"
+            >
+              保存する
+            </button>
+            <a
+              href={backHref}
+              className="rounded-xl border border-slate-200 bg-white px-6 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all"
+            >
+              キャンセル
+            </a>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
@@ -58,17 +64,19 @@ export function TextInput({
   name,
   required,
   placeholder,
+  hint,
 }: {
   label: string;
   name: string;
   required?: boolean;
   placeholder?: string;
+  hint?: string;
 }) {
   return (
     <div>
       <label className={labelClass}>
         {label}
-        {required && <span className="text-red-500 ml-0.5">*</span>}
+        {required && <span className="text-red-400 ml-0.5">*</span>}
       </label>
       <input
         type="text"
@@ -77,6 +85,7 @@ export function TextInput({
         placeholder={placeholder}
         className={inputClass}
       />
+      {hint && <p className="mt-1 text-xs text-slate-400">{hint}</p>}
     </div>
   );
 }
@@ -122,22 +131,14 @@ export function SelectInput({
       <select name={name} className={inputClass}>
         <option value="">{placeholder ?? "選択してください"}</option>
         {options.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
-          </option>
+          <option key={opt} value={opt}>{opt}</option>
         ))}
       </select>
     </div>
   );
 }
 
-export function DateInput({
-  label,
-  name,
-}: {
-  label: string;
-  name: string;
-}) {
+export function DateInput({ label, name }: { label: string; name: string }) {
   return (
     <div>
       <label className={labelClass}>{label}</label>
@@ -186,12 +187,10 @@ export function TagInput({
       <input
         type="text"
         name={name}
-        placeholder={placeholder ?? "タグをカンマ区切りで入力（例: 効率化, 自動化）"}
+        placeholder={placeholder ?? "カンマ区切りで入力（例: 効率化, 自動化）"}
         className={inputClass}
       />
-      <p className="mt-1 text-xs text-slate-400">
-        カンマ区切りで複数入力できます
-      </p>
+      <p className="mt-1 text-xs text-slate-400">複数タグはカンマ区切りで入力</p>
     </div>
   );
 }

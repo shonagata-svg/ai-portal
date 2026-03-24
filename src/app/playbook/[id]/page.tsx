@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getPlaybookById, getPlaybook } from "@/lib/notion";
-import { Tag, Badge, PageHeader } from "@/components/card";
+import { Tag, Badge, PageHeader, AuthorChip } from "@/components/card";
 import { Markdown } from "@/components/markdown";
 
 export const revalidate = 60;
@@ -50,11 +50,12 @@ export default async function PlaybookDetailPage(props: {
         </section>
       )}
 
-      {item.updatedAt && (
-        <p className="text-xs text-slate-400">
-          最終更新: {item.updatedAt.slice(0, 10)}
-        </p>
-      )}
+      <div className="flex items-center justify-between flex-wrap gap-2 pt-2">
+        {item.author && <AuthorChip name={item.author} size="md" />}
+        {item.updatedAt && (
+          <p className="text-xs text-slate-400">最終更新: {item.updatedAt.slice(0, 10)}</p>
+        )}
+      </div>
     </div>
   );
 }
