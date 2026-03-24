@@ -122,6 +122,11 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* AI / HAPPINESS Image */}
+      <section className="w-full rounded-2xl overflow-hidden">
+        <img src="/横長16_9.jpg" alt="AI / HAPPINESS" className="w-full object-cover" />
+      </section>
+
       {/* Metrics */}
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <MetricCard value={useCases.length} label="活用事例" icon="💡" />
