@@ -211,7 +211,6 @@ export async function createUseCase(data: {
       description: { rich_text: [{ text: { content: data.description } }] },
       prompt: { rich_text: [{ text: { content: data.prompt } }] },
       tags: { multi_select: data.tags.map((t) => ({ name: t })) },
-      submitted_by: { rich_text: [{ text: { content: data.author } }] },
     },
   });
 }
@@ -234,7 +233,6 @@ export async function createPrompt(data: {
       prompt_text: { rich_text: [{ text: { content: data.promptText } }] },
       example: { rich_text: [{ text: { content: data.example } }] },
       tags: { multi_select: data.tags.map((t) => ({ name: t })) },
-      submitted_by: { rich_text: [{ text: { content: data.author } }] },
     },
   });
 }
@@ -255,7 +253,6 @@ export async function createPlaybookEntry(data: {
       section: { select: data.section ? { name: data.section } : null },
       body: { rich_text: [{ text: { content: data.body } }] },
       tags: { multi_select: data.tags.map((t) => ({ name: t })) },
-      submitted_by: { rich_text: [{ text: { content: data.author } }] },
     },
   });
 }
@@ -274,7 +271,6 @@ export async function createFAQEntry(data: {
       question: { title: [{ text: { content: data.question } }] },
       answer: { rich_text: [{ text: { content: data.answer } }] },
       tags: { multi_select: data.tags.map((t) => ({ name: t })) },
-      submitted_by: { rich_text: [{ text: { content: data.author } }] },
     },
   });
 }
@@ -295,7 +291,6 @@ export async function createEvent(data: {
       date: { date: data.date ? { start: data.date } : null },
       body: { rich_text: [{ text: { content: data.body } }] },
       tags: { multi_select: data.tags.map((t) => ({ name: t })) },
-      submitted_by: { rich_text: [{ text: { content: data.author } }] },
     },
   });
 }
